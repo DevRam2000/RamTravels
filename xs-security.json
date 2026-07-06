@@ -1,11 +1,27 @@
 {
   "xsappname": "ramtravels",
   "tenant-mode": "dedicated",
-  "description": "Security profile of called application",
+  "description": "Security profile for RamTravels - Employee & Supplier Roles",
   "scopes": [
     {
       "name": "uaa.user",
       "description": "UAA"
+    },
+    {
+      "name": "$XSAPPNAME.employee",
+      "description": "Access employee container and services"
+    },
+    {
+      "name": "$XSAPPNAME.supplier",
+      "description": "Access supplier container and services"
+    },
+    {
+      "name": "$XSAPPNAME.user_read",
+      "description": "Read user profiles"
+    },
+    {
+      "name": "$XSAPPNAME.travel_manage",
+      "description": "Manage travel information"
     }
   ],
   "role-templates": [
@@ -14,6 +30,34 @@
       "description": "UAA",
       "scope-references": [
         "uaa.user"
+      ]
+    },
+    {
+      "name": "Employee",
+      "description": "Employee user role - access employee container",
+      "scope-references": [
+        "$XSAPPNAME.employee",
+        "$XSAPPNAME.user_read",
+        "$XSAPPNAME.travel_manage"
+      ]
+    },
+    {
+      "name": "Supplier",
+      "description": "Supplier user role - access supplier container",
+      "scope-references": [
+        "$XSAPPNAME.supplier",
+        "$XSAPPNAME.user_read",
+        "$XSAPPNAME.travel_manage"
+      ]
+    },
+    {
+      "name": "Admin",
+      "description": "Administrator - full access",
+      "scope-references": [
+        "$XSAPPNAME.employee",
+        "$XSAPPNAME.supplier",
+        "$XSAPPNAME.user_read",
+        "$XSAPPNAME.travel_manage"
       ]
     }
   ],
@@ -28,6 +72,12 @@
     "autoapprove": "false"
    },
    "xsenableasyncservice": "true",
-   "attributes": []
+   "attributes": [
+    {
+      "name": "role",
+      "description": "User role - Employee or Supplier",
+      "valueType": "string"
+    }
+  ]
 }
 

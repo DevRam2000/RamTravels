@@ -8,7 +8,8 @@ modules:
     path: gen/srv
     requires:
       - name: RamTravels-auth
-      - name: RamTravels-db
+      - name: RamTravels-db-employee
+      - name: RamTravels-db-supplier
       - name: RamTravels-destination-service
     provides:
       - name: srv-api
@@ -74,13 +75,17 @@ modules:
       supported-platforms:
         []
 
-  - name: RamTravels-db-deployer
+  - name: RamTravels-db-deployer-employee
     type: hdb
     path: gen/db
-    parameters:
-      buildpack: nodejs_buildpack
     requires:
-      - name: RamTravels-db
+      - name: RamTravels-db-employee
+
+  - name: RamTravels-db-deployer-supplier
+    type: hdb
+    path: gen/db
+    requires:
+      - name: RamTravels-db-supplier
 resources:
   - name: RamTravels-auth
     type: org.cloudfoundry.managed-service
@@ -137,7 +142,12 @@ resources:
       service: destination
       service-name: RamTravels-destination-service
       service-plan: lite
-  - name: RamTravels-db
+  - name: RamTravels-db-employee
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+  - name: RamTravels-db-supplier
     type: com.sap.xs.hdi-container
     parameters:
       service: hana
@@ -151,3 +161,4 @@ build-parameters:
       commands:
         - npm ci
         - npx cds build --production
+        - node scripts/patch-hdi-node-version.js

@@ -1,0 +1,42 @@
+### Employee metadata access
+GET http://localhost:4004/odata/v2/user/$metadata
+Authorization: Basic ZW1wbG95ZWU6aW5pdGlhbA==
+
+### Supplier metadata access
+GET http://localhost:4004/odata/v2/user/$metadata
+Authorization: Basic c3VwcGxpZXI6aW5pdGlhbA==
+
+### Employee create user
+POST http://localhost:4004/odata/v2/user/Users
+Content-Type: application/json
+Accept: application/json
+Authorization: Basic ZW1wbG95ZWU6aW5pdGlhbA==
+
+{
+  "userId": "EMP001",
+  "firstName": "Employee",
+  "lastName": "User",
+  "mobileNumber": 9000000001,
+  "gender": "M",
+  "emailId": "employee@ramtravels.com",
+  "Password": "initial",
+  "role": "Employee"
+}
+
+### Supplier create user
+POST http://localhost:4004/odata/v2/user/Users
+Content-Type: application/json
+Accept: application/json
+Authorization: Basic c3VwcGxpZXI6aW5pdGlhbA==
+
+{
+  "userId": "SUP003",
+  "firstName": "Supplier",
+  "lastName": "User",
+  "mobileNumber": 9000000002,
+  "gender": "M",
+  "emailId": "supplier@ramtravls.com",
+  "Password": "initial",
+  "role": "Supplier"
+}
+

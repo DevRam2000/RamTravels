@@ -30,19 +30,17 @@
     "start": "cds-serve",
     "watch-travels": "cds watch --open travels/webapp/index.html?sap-ui-xx-viewCache=false",
     "undeploy": "cf undeploy RamTravels --delete-services --delete-service-keys --delete-service-brokers",
-    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "build:gen": "npx cds build --production && node scripts/patch-hdi-node-version.js",
+    "build": "rimraf resources mta_archives && npm run build:gen && mbt build --mtar archive",
     "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
   },
   "cds": {
     "requires": {
-      "db": {
-        "[development]": {
-          "kind": "sqlite",
-          "schema_evolution": "auto",
-          "credentials": {
-            "database": "travel"
-          }
-        }
+      "employeeDb": {
+        "kind": "hana"
+      },
+      "supplierDb": {
+        "kind": "hana"
       },
       "rest_api": {
         "kind": "rest",
@@ -54,39 +52,39 @@
         "[development]": {
           "kind": "basic",
           "users": {
-            "Admin": {
+            "employee": {
               "attr": {
-                "email": "ramanaiahparimi@gmail.com",
-                "givenName": "Ramanaiah",
-                "familyName": "Parimi",
+                "email": "employee@ramtravels.com",
+                "givenName": "Employee",
+                "familyName": "User",
                 "password": "initial"
               },
               "roles": [
-                "Admin"
+                "Employee"
+              ]
+            },
+            "supplier": {
+              "attr": {
+                "email": "supplier@ramtravels.com",
+                "givenName": "Supplier",
+                "familyName": "User",
+                "password": "initial"
+              },
+              "roles": [
+                "Supplier"
               ]
             }
           }
         }
       },
-      "northwind": {
-        "kind": "odata-v2",
-        "credentials": {
-          "destination": "northwind"
-        }
-      },
-      "destinations": true,
       "html5-repo": true,
       "[production]": {
         "auth": {
           "kind": "xsuaa"
         },
-        "db": "hana"
-      },
-      "Northwind": {
-        "kind": "odata-v2",
-        "model": "srv/external/Northwind",
-        "credentials": {
-            "url": "https://services.odata.org/V2/Northwind/Northwind.svc/"
+        "db": {
+          "kind": "hana",
+          "multiTenant": true
         }
       }
     },
